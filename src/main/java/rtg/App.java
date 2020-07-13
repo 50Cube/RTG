@@ -15,6 +15,7 @@ public class App extends Application {
         primaryStage.setTitle("RTG");
         primaryStage.setScene(new Scene(root, 1600, 900));
         primaryStage.setMaximized(true);
+        primaryStage.setResizable(false);
         primaryStage.show();
     }
 
