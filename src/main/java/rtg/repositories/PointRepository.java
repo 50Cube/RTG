@@ -1,12 +1,10 @@
 package rtg.repositories;
 
-import rtg.controllers.ListViewCell;
 import rtg.exceptions.FileOperationsException;
 import rtg.exceptions.PointNotFoundException;
 import rtg.model.Point;
 import rtg.utils.FileOperations;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class PointRepository {
@@ -14,9 +12,13 @@ public class PointRepository {
     private FileOperations fileOperations;
     private List<Point> pointList;
 
-    public PointRepository() {
+    public PointRepository() throws FileOperationsException {
         this.fileOperations = new FileOperations();
-        this.pointList = new ArrayList<>();
+        refreshList();
+    }
+
+    public void refreshList() throws FileOperationsException {
+        this.pointList = fileOperations.readPointsFromFile();
     }
 
     public void addPoint(Point point) throws FileOperationsException {
@@ -25,14 +27,15 @@ public class PointRepository {
     }
 
     public Point getPoint(Point point) throws PointNotFoundException, FileOperationsException {
-        this.pointList = fileOperations.readPointsFromFile();
+        refreshList();
         if(pointList.contains(point))
             return point;
         else throw new PointNotFoundException();
     }
 
     public List<Point> getPoints() throws FileOperationsException {
-        return fileOperations.readPointsFromFile();
+        refreshList();
+        return this.pointList;
     }
 
     public void editPoint(Point oldPoint, Point newPoint) throws PointNotFoundException, FileOperationsException {

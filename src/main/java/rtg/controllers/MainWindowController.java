@@ -2,11 +2,13 @@ package rtg.controllers;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import rtg.exceptions.FileOperationsException;
 import rtg.model.Point;
@@ -25,11 +27,12 @@ public class MainWindowController implements Initializable {
     private ObservableList<Point> pointList;
     @FXML
     private GridPane tableView;
+    ImageView[] images = new ImageView[4];
 
     public MainWindowController() {
-        this.pointRepository = new PointRepository();
         this.pointListView = new ListView<>();
         try {
+            this.pointRepository = new PointRepository();
             pointList = FXCollections.observableArrayList(pointRepository.getPoints());
         } catch (FileOperationsException e) {
             //TODO alert
@@ -41,6 +44,7 @@ public class MainWindowController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         initPointList();
         initPictures();
+        addPointOnMouseClick();
     }
 
     private void initPointList() {
@@ -49,14 +53,31 @@ public class MainWindowController implements Initializable {
     }
 
     private void initPictures() {
-        ImageView[] images = new ImageView[4];
-        images[0] = new ImageView(new Image(getClass().getResourceAsStream("/rtg/picture.png")));
-        images[1] = new ImageView(new Image(getClass().getResourceAsStream("/rtg/picture.png")));
-        images[2] = new ImageView(new Image(getClass().getResourceAsStream("/rtg/picture.png")));
-        images[3] = new ImageView(new Image(getClass().getResourceAsStream("/rtg/picture.png")));
+        for(int i=0; i<images.length; i++) {
+            images[i] = new ImageView(new Image(getClass().getResourceAsStream("/rtg/picture.png")));
+        }
         tableView.add(images[0], 0, 0);
         tableView.add(images[1], 0, 1);
         tableView.add(images[2], 1, 0);
         tableView.add(images[3], 1, 1);
+    }
+
+    private void addPointOnMouseClick() {
+        for (ImageView image : images) {
+            image.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    System.out.println(event.getX() + " " + event.getY());
+                    try {
+                        pointRepository.addPoint(new Point((int) event.getX(), (int) event.getY()));
+                        pointList = FXCollections.observableArrayList(pointRepository.getPoints());
+                        pointListView.setItems(pointList);
+                    } catch (FileOperationsException e) {
+                        //TODO alert
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
     }
 }
