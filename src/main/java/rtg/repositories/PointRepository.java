@@ -1,5 +1,6 @@
 package rtg.repositories;
 
+import rtg.controllers.ListViewCell;
 import rtg.exceptions.FileOperationsException;
 import rtg.exceptions.PointNotFoundException;
 import rtg.model.Point;

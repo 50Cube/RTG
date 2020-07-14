@@ -19,20 +19,20 @@ public class MainWindowController implements Initializable {
 
     @FXML
     private ListView<Point> pointListView;
-
     private ObservableList<Point> pointList;
 
     public MainWindowController() {
         this.pointRepository = new PointRepository();
         this.pointListView = new ListView<>();
         try {
-            pointList = FXCollections.observableList(pointRepository.getPoints());
+            pointList = FXCollections.observableArrayList(pointRepository.getPoints());
         } catch (FileOperationsException e) {
             //TODO alert
             e.printStackTrace();
         }
     }
 
+    @FXML
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         initPointList();
@@ -40,6 +40,7 @@ public class MainWindowController implements Initializable {
 
     private void initPointList() {
         pointListView.setItems(pointList);
+        pointListView.setCellFactory(pointListView -> new ListViewCell());
     }
 
 }
