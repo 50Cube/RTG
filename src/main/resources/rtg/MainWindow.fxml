@@ -17,14 +17,15 @@
 
     <children>
        <ListView fx:id="pointListView" prefHeight="${screen.bounds.height}" prefWidth="${screen.bounds.width*0.2}" />
-       <GridPane prefHeight="${screen.bounds.height}" prefWidth="${screen.bounds.width*0.8}" AnchorPane.rightAnchor="0" style="-fx-background-color: red">
+       <GridPane fx:id="tableView" prefHeight="${screen.bounds.height}" prefWidth="${screen.bounds.width*0.8}" AnchorPane.rightAnchor="0"
+                 gridLinesVisible="true">
         <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" />
-          <ColumnConstraints hgrow="SOMETIMES" />
+          <ColumnConstraints prefWidth="${tableView.width*0.5}" halignment="CENTER" />
+          <ColumnConstraints prefWidth="${tableView.width*0.5}" halignment="CENTER" />
         </columnConstraints>
         <rowConstraints>
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"  />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints prefHeight="${tableView.height*0.5}" valignment="CENTER" />
+          <RowConstraints prefHeight="${tableView.height*0.5}" valignment="CENTER" />
         </rowConstraints>
       </GridPane>
    </children>
