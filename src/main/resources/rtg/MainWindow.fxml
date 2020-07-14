@@ -1,32 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.stage.Screen?>
 
 
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
 <AnchorPane prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="rtg.controllers.MainWindowController">
 
     <fx:define>
-        <Screen fx:factory="getPrimary" fx:id="screen" />
+        <Screen fx:factory="getPrimary" fx:id="screen"/>
     </fx:define>
 
-    <children>
-       <ListView fx:id="pointListView" prefHeight="${screen.bounds.height}" prefWidth="${screen.bounds.width*0.2}" />
-       <GridPane fx:id="tableView" prefHeight="${screen.bounds.height}" prefWidth="${screen.bounds.width*0.8}" AnchorPane.rightAnchor="0"
-                 gridLinesVisible="true">
-        <columnConstraints>
-          <ColumnConstraints prefWidth="${tableView.width*0.5}" halignment="CENTER" />
-          <ColumnConstraints prefWidth="${tableView.width*0.5}" halignment="CENTER" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints prefHeight="${tableView.height*0.5}" valignment="CENTER" />
-          <RowConstraints prefHeight="${tableView.height*0.5}" valignment="CENTER" />
-        </rowConstraints>
-      </GridPane>
-   </children>
+    <ListView fx:id="pointListView" prefHeight="${screen.bounds.height}" prefWidth="${screen.bounds.width*0.2}"/>
+    <GridPane fx:id="tableView" prefHeight="${screen.bounds.height}" prefWidth="${screen.bounds.width*0.8}"
+              AnchorPane.rightAnchor="0"
+              gridLinesVisible="true">
+     <columnConstraints>
+         <ColumnConstraints prefWidth="${tableView.width*0.5}" />
+         <ColumnConstraints prefWidth="${tableView.width*0.5}"/>
+     </columnConstraints>
+     <rowConstraints>
+         <RowConstraints prefHeight="${tableView.height*0.5}"/>
+         <RowConstraints prefHeight="${tableView.height*0.5}"/>
+     </rowConstraints>
+        <ImageView fx:id="image1" GridPane.columnIndex="0" GridPane.rowIndex="0">
+            <Image url="@picture.png"/>
+        </ImageView>
+        <ImageView fx:id="image2" GridPane.columnIndex="0" GridPane.rowIndex="1">
+            <Image url="@picture.png"/>
+        </ImageView>
+        <ImageView fx:id="image3" GridPane.columnIndex="1" GridPane.rowIndex="0">
+            <Image url="@picture.png"/>
+        </ImageView>
+        <ImageView fx:id="image4" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <Image url="@picture.png"/>
+        </ImageView>
+        <Pane fx:id="dots1" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+        <Pane fx:id="dots2" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+        <Pane fx:id="dots3" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+        <Pane fx:id="dots4" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+    </GridPane>
 </AnchorPane>
