@@ -1,5 +1,8 @@
 package rtg.repositories;
 
+import lombok.Getter;
+import lombok.Setter;
+import rtg.controllers.MainWindowController;
 import rtg.exceptions.FileOperationsException;
 import rtg.exceptions.PointNotFoundException;
 import rtg.model.Point;
@@ -7,8 +10,12 @@ import rtg.utils.FileOperations;
 
 import java.util.List;
 
+import static java.lang.Math.abs;
+import static java.lang.Math.tan;
+
 public class PointRepository {
 
+    public static final double RADIUS = 8;
     private FileOperations fileOperations;
     private List<Point> pointList;
 
@@ -31,6 +38,16 @@ public class PointRepository {
         if(pointList.contains(point))
             return point;
         else throw new PointNotFoundException();
+    }
+
+    public Point getPointByCircle(Point point) throws FileOperationsException, PointNotFoundException {
+        refreshList();
+        for(Point p : pointList) {
+            if(abs(p.getX() - point.getX()) < RADIUS && abs(p.getY() - point.getY()) < RADIUS) {
+                return p;
+            }
+        }
+        throw new PointNotFoundException();
     }
 
     public List<Point> getPoints() throws FileOperationsException {

@@ -15,13 +15,17 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import rtg.exceptions.FileOperationsException;
+import rtg.exceptions.PointNotFoundException;
 import rtg.model.Point;
 import rtg.repositories.PointRepository;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
+
+import static java.lang.Math.abs;
 
 
 public class MainWindowController implements Initializable {
@@ -52,6 +56,9 @@ public class MainWindowController implements Initializable {
     @FXML
     private Pane dots4;
     private List<Pane> dots = new LinkedList<>();
+    private List<Circle> circles = new ArrayList<>();
+    private Point draggedPoint = null;
+    private Circle draggedCircle = null;
 
     public MainWindowController() {
         this.pointListView = new ListView<>();
@@ -70,6 +77,7 @@ public class MainWindowController implements Initializable {
         initPictures();
         drawCircles();
         addPointOnMouseClick();
+        dragCircles();
     }
 
     private void initPointList() {
@@ -93,16 +101,21 @@ public class MainWindowController implements Initializable {
             pane.setOnMouseClicked(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
-                    for(Pane pane : dots)
-                        pane.getChildren().add(new Circle(event.getX(), event.getY(), 8, Color.BLACK));
-                    try {
-                        pointRepository.addPoint(new Point((int) event.getX(), (int) event.getY()));
-                        pointList = FXCollections.observableArrayList(pointRepository.getPoints());
-                    } catch (FileOperationsException e) {
-                        //TODO alert
-                        e.printStackTrace();
+                    if (getCircle(event.getX(), event.getY()) == null) {
+                        for (Pane pane : dots) {
+                            Circle circle = new Circle(event.getX(), event.getY(), PointRepository.RADIUS, Color.BLACK);
+                            circles.add(circle);
+                            pane.getChildren().add(circle);
+                        }
+                        try {
+                            pointRepository.addPoint(new Point((int) event.getX(), (int) event.getY()));
+                            pointList = FXCollections.observableArrayList(pointRepository.getPoints());
+                        } catch (FileOperationsException e) {
+                            //TODO alert
+                            e.printStackTrace();
+                        }
+                        pointListView.setItems(pointList);
                     }
-                    pointListView.setItems(pointList);
                 }
             });
         }
@@ -115,8 +128,62 @@ public class MainWindowController implements Initializable {
         dots.add(dots4);
 
         for(Point point : pointList) {
+            Circle circle = new Circle(point.getX(), point.getY(), PointRepository.RADIUS, Color.BLACK);
+            circles.add(circle);
             for(Pane pane : dots) {
-                pane.getChildren().add(new Circle(point.getX(), point.getY(), 8, Color.BLACK));
+                pane.getChildren().add(new Circle(point.getX(), point.getY(), PointRepository.RADIUS, Color.BLACK));
+            }
+        }
+    }
+
+    private void dragCircles() {
+        for(Pane pane : dots) {
+            pane.setOnMousePressed(event -> {
+                    try {
+                        draggedPoint = pointRepository.getPointByCircle(new Point((int)event.getX(), (int)event.getY()));
+                        draggedCircle = getCircle(event.getX(), event.getY());
+                    } catch (PointNotFoundException e) {
+                        // Nie znaleziono punktu
+                    } catch (FileOperationsException e) {
+                        //TODO alert
+                        e.printStackTrace();
+                    }
+            });
+            pane.setOnMouseReleased(event -> {
+                if(draggedPoint != null && draggedCircle != null) {
+                    try {
+                        pointRepository.editPoint(draggedPoint, new Point((int) event.getX(), (int) event.getY()));
+                        for(Pane p : dots)
+                            p.getChildren().add(new Circle(event.getX(), event.getY(), PointRepository.RADIUS, Color.BLACK));
+                        removeCircleFromPanes(draggedCircle);
+                        circles.remove(draggedCircle);
+                        circles.add(new Circle(event.getX(), event.getY(), PointRepository.RADIUS, Color.BLACK));
+                    } catch (PointNotFoundException e) {
+                        // Nie znaleziono punktu
+                    } catch (FileOperationsException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            draggedCircle = null;
+            draggedPoint = null;
+        }
+    }
+
+    private Circle getCircle(double x, double y) {
+        for(Circle circle : circles) {
+            if(abs(circle.getCenterX() - x) < PointRepository.RADIUS && abs(circle.getCenterY() - y) < PointRepository.RADIUS)
+                return circle;
+        }
+        return null;
+    }
+
+    private void removeCircleFromPanes(Circle circle) {
+        for(Pane pane : dots) {
+            for(int i=0; i<pane.getChildren().size(); i++) {
+                if(pane.getChildren().get(i).getBoundsInLocal().getMinX() + PointRepository.RADIUS == circle.getCenterX()
+                        && pane.getChildren().get(i).getBoundsInLocal().getMinY() + PointRepository.RADIUS == circle.getCenterY())
+                    pane.getChildren().remove(pane.getChildren().get(i));
             }
         }
     }
