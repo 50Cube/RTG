@@ -158,6 +158,8 @@ public class MainWindowController implements Initializable {
                         removeCircleFromPanes(draggedCircle);
                         circles.remove(draggedCircle);
                         circles.add(new Circle(event.getX(), event.getY(), PointRepository.RADIUS, Color.BLACK));
+                        pointList = FXCollections.observableArrayList(pointRepository.getPoints());
+                        pointListView.setItems(pointList);
                     } catch (PointNotFoundException e) {
                         // Nie znaleziono punktu
                     } catch (FileOperationsException e) {
