@@ -7,10 +7,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
@@ -23,10 +20,7 @@ import rtg.model.Point;
 import rtg.repositories.PointRepository;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 import static java.lang.Math.abs;
 
@@ -89,17 +83,26 @@ public class MainWindowController implements Initializable {
 
     private void invokeButton() {
         button.setOnAction(event -> {
-            try {
-                pointRepository.removeAllPoints();
-            } catch (FileOperationsException e) {
-                Alert alert = new Alert(Alert.AlertType.ERROR, e.getMessage());
-                alert.showAndWait();
+
+            ButtonType cancelButton = new ButtonType("Nie");
+            Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION, "Czy na pewno chcesz to zrobić?", new ButtonType("Tak"), cancelButton);
+            Optional<ButtonType> result = confirmation.showAndWait();
+
+            if(result.get() == cancelButton)
+                confirmation.close();
+            else {
+                try {
+                    pointRepository.removeAllPoints();
+                } catch (FileOperationsException e) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR, e.getMessage());
+                    alert.showAndWait();
+                }
+                for (Circle circle : circles)
+                    removeCircleFromPanes(circle);
+                circles = new ArrayList<>();
+                this.pointList.clear();
+                this.pointListView.setItems(pointList);
             }
-            for(Circle circle : circles)
-                removeCircleFromPanes(circle);
-            circles = new ArrayList<>();
-            this.pointList.clear();
-            this.pointListView.setItems(pointList);
         });
     }
 

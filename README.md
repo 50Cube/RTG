@@ -1,2 +1,2 @@
 Zaimplementowana została opcjonalna funkcjonalność walidacji pól tekstowych (możliwe jest wpisanie od jednej do trzech cyfr).
-Dodatkowo dodawane punkty zapisywane są w pliku points.json oraz wczytywanie z niego przy uruchomieniu aplikacji. Listę punktów można wyczyścić poprzez kliknięcie przycisku.
+Dodatkowo dodawane punkty zapisywane są w pliku points.json oraz wczytywane z niego przy uruchomieniu aplikacji. Listę punktów można wyczyścić poprzez kliknięcie przycisku i potwierdzenie operacji.
