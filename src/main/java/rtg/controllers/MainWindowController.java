@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.image.ImageView;
@@ -64,11 +65,11 @@ public class MainWindowController implements Initializable {
     public MainWindowController() {
         this.pointListView = new ListView<>();
         try {
-            this.pointRepository = new PointRepository();
+            pointRepository = new PointRepository();
             pointList = FXCollections.observableArrayList(pointRepository.getPoints());
         } catch (FileOperationsException e) {
-            //TODO alert
-            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR, e.getMessage());
+            alert.showAndWait();
         }
     }
 
@@ -87,7 +88,8 @@ public class MainWindowController implements Initializable {
             try {
                 return new ListViewCell();
             } catch (FileOperationsException e) {
-                e.printStackTrace();
+                Alert alert = new Alert(Alert.AlertType.ERROR, e.getMessage());
+                alert.showAndWait();
             }
             return new ListCell<>();
         });
@@ -119,8 +121,8 @@ public class MainWindowController implements Initializable {
                             pointRepository.addPoint(new Point((int) event.getX(), (int) event.getY()));
                             pointList = FXCollections.observableArrayList(pointRepository.getPoints());
                         } catch (FileOperationsException e) {
-                            //TODO alert
-                            e.printStackTrace();
+                            Alert alert = new Alert(Alert.AlertType.ERROR, e.getMessage());
+                            alert.showAndWait();
                         }
                         pointListView.setItems(pointList);
                     }
@@ -153,8 +155,8 @@ public class MainWindowController implements Initializable {
                     } catch (PointNotFoundException e) {
                         // Nie znaleziono punktu
                     } catch (FileOperationsException e) {
-                        //TODO alert
-                        e.printStackTrace();
+                        Alert alert = new Alert(Alert.AlertType.ERROR, e.getMessage());
+                        alert.showAndWait();
                     }
             });
             pane.setOnMouseReleased(event -> {
@@ -171,7 +173,8 @@ public class MainWindowController implements Initializable {
                     } catch (PointNotFoundException e) {
                         // Nie znaleziono punktu
                     } catch (FileOperationsException e) {
-                        e.printStackTrace();
+                        Alert alert = new Alert(Alert.AlertType.ERROR, e.getMessage());
+                        alert.showAndWait();
                     }
                 }
             });
