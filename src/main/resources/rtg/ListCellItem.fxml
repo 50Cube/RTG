@@ -3,12 +3,12 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-    <HBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:id="hBox">
-        <children>
-            <Label text="Punkt diagnostyczny: x = " />
-            <TextField fx:id="pointX" prefWidth="50" />
-            <Label text=" y = " />
-            <TextField fx:id="pointY" prefWidth="50" />
-        </children>
-    </HBox>
+<HBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:id="hBox">
+    <Label text="Punkt diagnostyczny: x = "/>
+    <TextField fx:id="pointX" prefWidth="50"/>
+    <Button fx:id="buttonX" text="Zmień X" />
+    <Label text=" y = "/>
+    <TextField fx:id="pointY" prefWidth="50"/>
+    <Button fx:id="buttonY" text="Zmień Y"/>
+</HBox>
 

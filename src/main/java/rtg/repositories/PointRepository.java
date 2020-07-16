@@ -1,8 +1,5 @@
 package rtg.repositories;
 
-import lombok.Getter;
-import lombok.Setter;
-import rtg.controllers.MainWindowController;
 import rtg.exceptions.FileOperationsException;
 import rtg.exceptions.PointNotFoundException;
 import rtg.model.Point;
@@ -11,7 +8,6 @@ import rtg.utils.FileOperations;
 import java.util.List;
 
 import static java.lang.Math.abs;
-import static java.lang.Math.tan;
 
 public class PointRepository {
 
@@ -56,6 +52,7 @@ public class PointRepository {
     }
 
     public void editPoint(Point oldPoint, Point newPoint) throws PointNotFoundException, FileOperationsException {
+        refreshList();
         if(pointList.contains(oldPoint)) {
             pointList.remove(oldPoint);
             pointList.add(newPoint);

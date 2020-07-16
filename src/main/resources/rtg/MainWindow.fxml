@@ -14,10 +14,9 @@
         <Screen fx:factory="getPrimary" fx:id="screen"/>
     </fx:define>
 
-    <ListView fx:id="pointListView" prefHeight="${screen.bounds.height}" prefWidth="${screen.bounds.width*0.2}"/>
-    <GridPane fx:id="tableView" prefHeight="${screen.bounds.height}" prefWidth="${screen.bounds.width*0.8}"
-              AnchorPane.rightAnchor="0"
-              gridLinesVisible="true">
+    <ListView fx:id="pointListView" prefHeight="${screen.bounds.height}" prefWidth="${screen.bounds.width*0.25}"/>
+    <GridPane fx:id="tableView" prefHeight="${screen.bounds.height}" prefWidth="${screen.bounds.width*0.75}"
+              AnchorPane.rightAnchor="0" gridLinesVisible="true">
      <columnConstraints>
          <ColumnConstraints prefWidth="${tableView.width*0.5}" />
          <ColumnConstraints prefWidth="${tableView.width*0.5}"/>

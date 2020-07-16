@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -30,7 +31,7 @@ import static java.lang.Math.abs;
 
 public class MainWindowController implements Initializable {
 
-    private PointRepository pointRepository;
+    private static PointRepository pointRepository;
 
     @FXML
     private ListView<Point> pointListView;
@@ -55,8 +56,8 @@ public class MainWindowController implements Initializable {
     private Pane dots3;
     @FXML
     private Pane dots4;
-    private List<Pane> dots = new LinkedList<>();
-    private List<Circle> circles = new ArrayList<>();
+    private static List<Pane> dots = new LinkedList<>();
+    private static List<Circle> circles = new ArrayList<>();
     private Point draggedPoint = null;
     private Circle draggedCircle = null;
 
@@ -82,7 +83,14 @@ public class MainWindowController implements Initializable {
 
     private void initPointList() {
         pointListView.setItems(pointList);
-        pointListView.setCellFactory(pointListView -> new ListViewCell());
+        pointListView.setCellFactory(pointListView -> {
+            try {
+                return new ListViewCell();
+            } catch (FileOperationsException e) {
+                e.printStackTrace();
+            }
+            return new ListCell<>();
+        });
     }
 
     private void initPictures() {
@@ -172,7 +180,7 @@ public class MainWindowController implements Initializable {
         }
     }
 
-    private Circle getCircle(double x, double y) {
+    private static Circle getCircle(double x, double y) {
         for(Circle circle : circles) {
             if(abs(circle.getCenterX() - x) < PointRepository.RADIUS && abs(circle.getCenterY() - y) < PointRepository.RADIUS)
                 return circle;
@@ -180,13 +188,23 @@ public class MainWindowController implements Initializable {
         return null;
     }
 
-    private void removeCircleFromPanes(Circle circle) {
-        for(Pane pane : dots) {
-            for(int i=0; i<pane.getChildren().size(); i++) {
-                if(pane.getChildren().get(i).getBoundsInLocal().getMinX() + PointRepository.RADIUS == circle.getCenterX()
-                        && pane.getChildren().get(i).getBoundsInLocal().getMinY() + PointRepository.RADIUS == circle.getCenterY())
-                    pane.getChildren().remove(pane.getChildren().get(i));
+    private static void removeCircleFromPanes(Circle circle) {
+        if(circle != null) {
+            for (Pane pane : dots) {
+                for (int i = 0; i < pane.getChildren().size(); i++) {
+                    if (pane.getChildren().get(i).getBoundsInLocal().getMinX() + PointRepository.RADIUS == circle.getCenterX()
+                            && pane.getChildren().get(i).getBoundsInLocal().getMinY() + PointRepository.RADIUS == circle.getCenterY())
+                        pane.getChildren().remove(pane.getChildren().get(i));
+                }
             }
         }
+    }
+
+    public static void moveCircle(Point oldPoint, Point newPoint) {
+        for(Pane p : dots)
+            p.getChildren().add(new Circle(newPoint.getX(), newPoint.getY(), PointRepository.RADIUS, Color.BLACK));
+        removeCircleFromPanes(getCircle(oldPoint.getX(), oldPoint.getY()));
+        circles.remove(getCircle(oldPoint.getX(), oldPoint.getY()));
+        circles.add(new Circle(newPoint.getX(), newPoint.getY(), PointRepository.RADIUS, Color.BLACK));
     }
 }
