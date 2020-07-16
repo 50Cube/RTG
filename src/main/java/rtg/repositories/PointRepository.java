@@ -5,6 +5,7 @@ import rtg.exceptions.PointNotFoundException;
 import rtg.model.Point;
 import rtg.utils.FileOperations;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.Math.abs;
@@ -58,5 +59,10 @@ public class PointRepository {
             pointList.add(newPoint);
             fileOperations.savePointsToFile(this.pointList);
         } else throw new PointNotFoundException();
+    }
+
+    public void removeAllPoints() throws FileOperationsException {
+        pointList = new ArrayList<>();
+        fileOperations.savePointsToFile(this.pointList);
     }
 }

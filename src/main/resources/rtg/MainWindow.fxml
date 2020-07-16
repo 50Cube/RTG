@@ -14,7 +14,10 @@
         <Screen fx:factory="getPrimary" fx:id="screen"/>
     </fx:define>
 
-    <ListView fx:id="pointListView" prefHeight="${screen.bounds.height}" prefWidth="${screen.bounds.width*0.25}"/>
+    <VBox prefWidth="${screen.bounds.width*0.25}" >
+        <Button fx:id="button" text="Wyczyść listę" prefWidth="${screen.bounds.width*0.25}" />
+        <ListView fx:id="pointListView" prefHeight="${screen.bounds.height}" />
+    </VBox>
     <GridPane fx:id="tableView" prefHeight="${screen.bounds.height}" prefWidth="${screen.bounds.width*0.75}"
               AnchorPane.rightAnchor="0" gridLinesVisible="true">
      <columnConstraints>

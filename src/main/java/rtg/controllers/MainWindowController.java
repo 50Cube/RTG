@@ -8,6 +8,7 @@ import javafx.fxml.Initializable;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.image.ImageView;
@@ -38,6 +39,9 @@ public class MainWindowController implements Initializable {
     private ListView<Point> pointListView;
     @FXML
     private ObservableList<Point> pointList;
+
+    @FXML
+    private Button button;
 
     @FXML
     private ImageView image1;
@@ -80,6 +84,23 @@ public class MainWindowController implements Initializable {
         drawCircles();
         addPointOnMouseClick();
         dragCircles();
+        invokeButton();
+    }
+
+    private void invokeButton() {
+        button.setOnAction(event -> {
+            try {
+                pointRepository.removeAllPoints();
+            } catch (FileOperationsException e) {
+                Alert alert = new Alert(Alert.AlertType.ERROR, e.getMessage());
+                alert.showAndWait();
+            }
+            for(Circle circle : circles)
+                removeCircleFromPanes(circle);
+            circles = new ArrayList<>();
+            this.pointList.clear();
+            this.pointListView.setItems(pointList);
+        });
     }
 
     private void initPointList() {
