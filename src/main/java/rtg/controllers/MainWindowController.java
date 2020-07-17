@@ -27,7 +27,7 @@ import static java.lang.Math.abs;
 
 public class MainWindowController implements Initializable {
 
-    private static PointRepository pointRepository;
+    private PointRepository pointRepository;
 
     @FXML
     private ListView<Point> pointListView;
